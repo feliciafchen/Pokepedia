@@ -5,13 +5,30 @@ import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import CharacterCard from "./CharacterCard";
-import characters from "./protagonists.json";
+import PokemonCard from "./components/PokemonCard";
+import TextField from "@mui/material/TextField";
 import { useState } from "react";
 
+var requestOptions = {
+  method: "GET",
+  redirect: "follow",
+};
+
 function App() {
-  // state variable to store the click count!
-  const [count, setCounter] = useState(0);
+  const [pokemon, setPokemon] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  async function getPokemon() {
+    const imageId = searchText;
+    const response = await fetch(
+      "https://api.tcgdex.net/v2/en/cards/?image=h&name=" + imageId,
+      requestOptions
+    );
+    const data = await response.json();
+    const pokemonData = data;
+    setPokemon(pokemonData);
+  }
+  getPokemon();
 
   return (
     <div className="App">
@@ -24,17 +41,15 @@ function App() {
       >
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Characters Inc
+            Pokepedia
           </Typography>
           <Button
             href="#"
             variant="outlined"
             sx={{ my: 1, mx: 1.5 }}
-            onClick={() => {
-              setCounter(count + 1);
-            }}
+            onClick={() => {}}
           >
-            COUNT BUTTON
+            Button
           </Button>
         </Toolbar>
       </AppBar>
@@ -45,7 +60,7 @@ function App() {
           color="text.primary"
           sx={{ py: 2 }}
         >
-          Prevalent Protagonists
+          Pokepedia
         </Typography>
         <Typography
           variant="h5"
@@ -53,8 +68,22 @@ function App() {
           color="text.secondary"
           sx={{ mx: 10 }}
         >
-          Counter: {count}
+          the best pokemon card index ever
         </Typography>
+        <TextField
+          sx={{
+            mt: "25px",
+          }}
+          fullWidth
+          id="outlined-basic"
+          label="ex: pikachu"
+          variant="outlined"
+          value={searchText}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            setSearchText(newValue);
+          }}
+        />
       </Container>
       {/* End hero unit */}
       <Container maxWidth="lg">
@@ -64,12 +93,12 @@ function App() {
           justifyContent="center"
           alignItems="flex-start"
         >
-          {characters.map((character) => (
-            <Grid item xs={12} md={4} key={character.title}>
-              <CharacterCard
-                characterName={character.title}
-                image={character.pic}
-                descriptionArray={character.description}
+          {pokemon?.slice(0, 30).map((p) => (
+            <Grid item xs={12} md={4} key={p.name}>
+              <PokemonCard
+                name={p.name}
+                img={p.image + "/high.png"}
+                // descriptionArray={character.description}
               />
             </Grid>
           ))}
