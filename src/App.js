@@ -8,6 +8,7 @@ import Container from "@mui/material/Container";
 import PokemonCard from "./components/PokemonCard";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import styles from "./App.css";
 
 var requestOptions = {
   method: "GET",
@@ -17,18 +18,23 @@ var requestOptions = {
 function App() {
   const [pokemon, setPokemon] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [saved, setSaved] = useState([]);
+  const imageId = searchText;
 
   async function getPokemon() {
-    const imageId = searchText;
     const response = await fetch(
-      "https://api.tcgdex.net/v2/en/cards/?image=h&name=" + imageId,
+      `https://api.tcgdex.net/v2/en/cards/?image=h&name=${imageId}`,
       requestOptions
     );
     const data = await response.json();
-    const pokemonData = data;
+    const pokemonData = data.splice(0, 30);
     setPokemon(pokemonData);
   }
   getPokemon();
+
+  function savePokemon(pokemonToSave) {
+    setSaved([...saved, pokemonToSave]);
+  }
 
   return (
     <div className="App">
@@ -38,10 +44,15 @@ function App() {
         color="default"
         elevation={0}
         sx={{ borderBottom: "1px solid lightgray" }}
+        img
       >
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Pokepedia
+          <Typography
+            variant="h6"
+            sx={{ flexGrow: 1 }}
+            style={{ fontFamily: "Pokemon Solid" }}
+          >
+            Poképedia
           </Typography>
           <Button
             href="#"
@@ -49,7 +60,7 @@ function App() {
             sx={{ my: 1, mx: 1.5 }}
             onClick={() => {}}
           >
-            Button
+            Your Deck
           </Button>
         </Toolbar>
       </AppBar>
@@ -59,8 +70,9 @@ function App() {
           align="center"
           color="text.primary"
           sx={{ py: 2 }}
+          style={{ fontFamily: "Pokemon Hollow", fontSize: 75 }}
         >
-          Pokepedia
+          Poképedia
         </Typography>
         <Typography
           variant="h5"
@@ -76,16 +88,15 @@ function App() {
           }}
           fullWidth
           id="outlined-basic"
-          label="ex: pikachu"
+          label="name"
           variant="outlined"
           value={searchText}
           onChange={(event) => {
-            const newValue = event.target.value;
+            const newValue = event.target.value.toLowerCase();
             setSearchText(newValue);
           }}
         />
       </Container>
-      {/* End hero unit */}
       <Container maxWidth="lg">
         <Grid
           container
@@ -93,13 +104,15 @@ function App() {
           justifyContent="center"
           alignItems="flex-start"
         >
-          {pokemon?.slice(0, 30).map((p) => (
-            <Grid item xs={12} md={4} key={p.name}>
-              <PokemonCard
-                name={p.name}
-                img={p.image + "/high.png"}
-                // descriptionArray={character.description}
-              />
+          {/* {saved?.map((p) => (
+            <Grid item xs={12} md={4} key={p.id}>
+              <PokemonCard name={p.name} img={p.image + "/high.png"} />
+            </Grid>
+          ))} */}
+          {/* <Modal></Modal> */}
+          {pokemon?.map((p) => (
+            <Grid item xs={12} md={4} key={p.id} onClick={() => {}}>
+              <PokemonCard name={p.name} img={p.image + "/high.png"} />
             </Grid>
           ))}
         </Grid>

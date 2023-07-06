@@ -9,13 +9,13 @@ export default function PokemonCard({ img }) {
     <Card
       raised
       sx={{
-        maxWidth: 250,
+        maxWidth: 300,
         margin: "0 auto",
       }}
     >
       <CardMedia
         component="img"
-        height="350"
+        height="400"
         image={img}
         alt={"alt"}
         sx={{ objectFit: "fill" }}
