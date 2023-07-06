@@ -111,9 +111,8 @@ function App() {
           ))} */}
           {/* <Modal></Modal> */}
           {pokemon?.map((p) => (
-            <Grid item xs={12} md={4} key={p.id} onClick={() => {}}>
-              <PokemonCard name={p.name} img={p.image + "/high.png"} />
-            </Grid>
+            // <Grid item xs={12} md={4} key={p.id} onClick={() => {}}>
+            <PokemonCard pokeID={p.id} img={p.image + "/high.png"} />
           ))}
         </Grid>
       </Container>
