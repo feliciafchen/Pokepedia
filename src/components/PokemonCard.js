@@ -5,11 +5,42 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { styled, Box } from "@mui/system";
 import Modal from "@mui/base/Modal";
+import Checkbox from "@mui/material/Checkbox";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
 
-export default function PokemonCard({ name, img, pokeId }) {
+var requestOptions = {
+  method: "GET",
+  redirect: "follow",
+};
+
+export default function PokemonCard({ name, image, id, saveToggle }) {
+  const [pokemon, setPokemon] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const pokemonID = id;
+  const rarity = pokemon.rarity;
+  const illustrator = pokemon.illustrator;
+
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+  const [checked, setChecked] = React.useState(false);
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+    saveToggle({ name, id, image }, event.target.checked);
+  };
+
+  async function getPokemon() {
+    const response = await fetch(
+      `https://api.tcgdex.net/v2/en/cards/${pokemonID}`,
+      requestOptions
+    );
+    const data = await response.json();
+    const pokemonData = data;
+    setPokemon(pokemonData);
+  }
+
   return (
     <div>
       <Card
@@ -18,12 +49,16 @@ export default function PokemonCard({ name, img, pokeId }) {
           maxWidth: 300,
           margin: "0 auto",
         }}
-        onClick={handleOpen}
+        onClick={() => {
+          getPokemon();
+          handleOpen();
+          console.log(pokemon);
+        }}
       >
         <CardMedia
           component="img"
           height="400"
-          image={img}
+          image={image}
           alt={"alt"}
           sx={{ objectFit: "fill" }}
         />
@@ -39,12 +74,24 @@ export default function PokemonCard({ name, img, pokeId }) {
           <CardMedia
             component="img"
             height="400"
-            image={img}
+            image={image}
             alt={"alt"}
-            sx={{ objectFit: "fill" }}
+            sx={{ objectFit: "contain" }}
           />
-          <h2 id="unstyled-modal-title">{name}</h2>
-          <p id="unstyled-modal-description">Aliquid amet deserunt earum!</p>
+          <h2 id="unstyled-modal-title">
+            {name}
+            <Checkbox
+              {...label}
+              checked={checked}
+              onChange={handleChange}
+              inputProps={{ "aria-label": "controlled" }}
+              icon={<FavoriteBorder />}
+              checkedIcon={<Favorite />}
+            />
+          </h2>
+          <p id="unstyled-modal-description">Rarity: {rarity}</p>
+          <p id="unstyled-modal-description">Illustrator: {illustrator}</p>
+          {/* {pokemon.types.map} */}
         </Box>
       </StyledModal>
     </div>

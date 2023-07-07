@@ -8,6 +8,10 @@ import Container from "@mui/material/Container";
 import PokemonCard from "./components/PokemonCard";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import ToggleButton from "@mui/material/ToggleButton";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import styles from "./App.css";
 
 var requestOptions = {
@@ -19,6 +23,8 @@ function App() {
   const [pokemon, setPokemon] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [saved, setSaved] = useState([]);
+  const [selected, setSelected] = useState(false);
+
   const imageId = searchText;
 
   async function getPokemon() {
@@ -36,6 +42,15 @@ function App() {
     setSaved([...saved, pokemonToSave]);
   }
 
+  function deletePokemon(pokemonToSave) {
+    setSaved([]);
+  }
+
+  function saveIconClicked(pokemonData, toggle) {
+    if (toggle === true) savePokemon(pokemonData);
+    else if (toggle === false) deletePokemon(pokemonData);
+  }
+
   return (
     <div className="App">
       <CssBaseline />
@@ -44,7 +59,6 @@ function App() {
         color="default"
         elevation={0}
         sx={{ borderBottom: "1px solid lightgray" }}
-        img
       >
         <Toolbar>
           <Typography
@@ -54,14 +68,15 @@ function App() {
           >
             Poképedia
           </Typography>
-          <Button
-            href="#"
-            variant="outlined"
-            sx={{ my: 1, mx: 1.5 }}
-            onClick={() => {}}
+          <ToggleButton
+            value="check"
+            selected={selected}
+            onChange={() => {
+              setSelected(!selected);
+            }}
           >
-            Your Deck
-          </Button>
+            <BookmarkBorderIcon />
+          </ToggleButton>
         </Toolbar>
       </AppBar>
       <Container maxWidth="md" sx={{ my: 4 }}>
@@ -72,6 +87,10 @@ function App() {
           sx={{ py: 2 }}
           style={{ fontFamily: "Pokemon Hollow", fontSize: 75 }}
         >
+          <img
+            style={{ width: 65, height: 65 }}
+            src={require("./assets/icons/pokeball.png")}
+          ></img>
           Poképedia
         </Typography>
         <Typography
@@ -88,7 +107,7 @@ function App() {
           }}
           fullWidth
           id="outlined-basic"
-          label="name"
+          label="pokemon name"
           variant="outlined"
           value={searchText}
           onChange={(event) => {
@@ -104,21 +123,27 @@ function App() {
           justifyContent="center"
           alignItems="flex-start"
         >
-          {/* {saved?.map((p) => (
-            <Grid item xs={12} md={4} key={p.id}>
-              <PokemonCard name={p.name} img={p.image + "/high.png"} />
-            </Grid>
-          ))} */}
-          {/* <Modal></Modal> */}
-          {pokemon?.map((p) => (
-            <Grid item xs={12} md={4} key={p.id} onClick={() => {}}>
-              <PokemonCard
-                name={p.name}
-                pokeID={p.id}
-                img={p.image + "/high.png"}
-              />
-            </Grid>
-          ))}
+          {selected
+            ? saved?.map((p) => (
+                <Grid item xs={12} md={4} key={p.id}>
+                  <PokemonCard
+                    name={p.name}
+                    image={p.image}
+                    id={p.id}
+                    saveToggle={saveIconClicked}
+                  />
+                </Grid>
+              ))
+            : pokemon?.map((p) => (
+                <Grid item xs={12} md={4} key={p.id}>
+                  <PokemonCard
+                    name={p.name}
+                    image={p.image + "/high.png"}
+                    id={p.id}
+                    saveToggle={saveIconClicked}
+                  />
+                </Grid>
+              ))}
         </Grid>
       </Container>
     </div>
