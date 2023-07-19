@@ -97,7 +97,7 @@ function App() {
           color="text.secondary"
           sx={{ mx: 10 }}
         >
-          the best pokemon card index ever
+          search for your favorite pokemon card!
         </Typography>
         <TextField
           sx={{
