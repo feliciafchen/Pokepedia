@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/pokepedia/static/css/main.9a64b754.css",
+    "main.js": "/pokepedia/static/js/main.2bc57530.js",
+    "static/media/pokeball.png": "/pokepedia/static/media/pokeball.6c6b4cb944d0eedc032f.png",
+    "static/media/Pokemon Hollow.ttf": "/pokepedia/static/media/Pokemon Hollow.47f77ce9939c5330492b.ttf",
+    "static/media/Pokemon Solid.ttf": "/pokepedia/static/media/Pokemon Solid.5d60be1f7ff5fcc21fc1.ttf",
+    "index.html": "/pokepedia/index.html",
+    "main.9a64b754.css.map": "/pokepedia/static/css/main.9a64b754.css.map",
+    "main.2bc57530.js.map": "/pokepedia/static/js/main.2bc57530.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9a64b754.css",
+    "static/js/main.2bc57530.js"
+  ]
+}
