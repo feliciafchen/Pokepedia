@@ -8,8 +8,6 @@ import Container from "@mui/material/Container";
 import PokemonCard from "./components/PokemonCard";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
 import ToggleButton from "@mui/material/ToggleButton";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import styles from "./App.css";
